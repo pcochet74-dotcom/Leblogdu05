@@ -2,55 +2,214 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Mon Blog</title>
+  <title>Chat type WhatsApp</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #0b141a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .chat-wrapper {
+      width: 100%;
+      max-width: 420px;
+      height: 80vh;
+      background: #111b21;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .chat-header {
+      background: #202c33;
+      color: #e9edef;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #00a884;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .chat-header-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header-info span:first-child {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .chat-header-info span:last-child {
+      font-size: 0.75rem;
+      color: #8696a0;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 0.75rem;
+      background: url("https://i.imgur.com/0Zf7QyS.png");
+      background-size: cover;
+      overflow-y: auto;
+    }
+
+    .msg {
+      max-width: 80%;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 0.4rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      position: relative;
+    }
+
+    .msg.me {
+      margin-left: auto;
+      background: #005c4b;
+      color: #e9edef;
+      border-bottom-right-radius: 0;
+    }
+
+    .msg.other {
+      margin-right: auto;
+      background: #202c33;
+      color: #e9edef;
+      border-bottom-left-radius: 0;
+    }
+
+    .msg-time {
+      font-size: 0.7rem;
+      color: #8696a0;
+      margin-left: 0.4rem;
+    }
+
+    .chat-input {
+      background: #202c33;
+      padding: 0.5rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .chat-input input {
+      flex: 1;
+      border: none;
+      border-radius: 20px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9rem;
+      background: #2a3942;
+      color: #e9edef;
+      outline: none;
+    }
+
+    .chat-input button {
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      background: #00a884;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .chat-input button:hover {
+      background: #02906f;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>Mon Blog</h1>
-    <p>Un blog statique hébergé sur GitHub Pages</p>
-  </header>
+  <div class="chat-wrapper">
+    <div class="chat-header">
+      <div class="avatar">P</div>
+      <div class="chat-header-info">
+        <span>Contact démo</span>
+        <span>en ligne</span>
+      </div>
+    </div>
 
-  <main class="layout">
-    <aside class="sidebar">
-      <h2>Articles</h2>
-      <ul>
-        <li>
-          <a href="posts/post1.html" target="postFrame">
-            Article 1 – Introduction
-          </a>
-          <a class="whatsapp"
-             href="https://wa.me/?text=Regarde%20cet%20article%20:%20https://ton-user.github.io/ton-repo/posts/post1.html"
-             target="_blank">
-            Partager WhatsApp
-          </a>
-        </li>
-        <li>
-          <a href="posts/post2.html" target="postFrame">
-            Article 2 – Suite
-          </a>
-          <a class="whatsapp"
-             href="https://wa.me/?text=Regarde%20cet%20article%20:%20https://ton-user.github.io/ton-repo/posts/post2.html"
-             target="_blank">
-            Partager WhatsApp
-          </a>
-        </li>
-      </ul>
-    </aside>
+    <div class="chat-messages" id="messages">
+      <div class="msg other">
+        Salut 👋<span class="msg-time">10:12</span>
+      </div>
+      <div class="msg me">
+        Hey, ce chat ressemble à WhatsApp !<span class="msg-time">10:13</span>
+      </div>
+    </div>
 
-    <section class="content">
-      <iframe
-        name="postFrame"
-        src="posts/post1.html"
-        frameborder="0"
-        class="post-frame"
-      ></iframe>
-    </section>
-  </main>
+    <div class="chat-input">
+      <input
+        type="text"
+        id="messageInput"
+        placeholder="Écrire un message"
+      >
+      <button id="sendBtn" title="Envoyer sur WhatsApp">➤</button>
+    </div>
+  </div>
 
-  <footer>
-    <p>© 2026 – Mon Blog GitHub Pages</p>
-  </footer>
+  <script>
+    // ⚠️ Remplace par TON numéro au format international sans +
+    const WHATSAPP_NUMBER = "33612345678"; // ex : 33 + numéro français sans le 0
+
+    const input = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const messages = document.getElementById("messages");
+
+    function sendToWhatsApp() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      // Ajout du message dans l'UI locale
+      const msgDiv = document.createElement("div");
+      msgDiv.className = "msg me";
+      const now = new Date();
+      const time = now.toTimeString().slice(0,5);
+      msgDiv.innerHTML = `${text}<span class="msg-time">${time}</span>`;
+      messages.appendChild(msgDiv);
+      messages.scrollTop = messages.scrollHeight;
+
+      // Ouverture de WhatsApp / WhatsApp Web
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+      window.open(url, "_blank");
+
+      input.value = "";
+      input.focus();
+    }
+
+    sendBtn.addEventListener("click", sendToWhatsApp);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        sendToWhatsApp();
+      }
+    });
+  </script>
 </body>
 </html>
